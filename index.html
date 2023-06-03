@@ -1,5 +1,127 @@
 <html>
   <head>
+    <title>LiveFire Food Calculator</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #000000; /* dark text color */
+        background: linear-gradient(45deg, #9eaebd, #d4d5d6, #9eaebd, #d4d5d6);
+        background-size: 400% 400%;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: url("img/Bryan.Rice_a_bunch_of_space_aliens_standing_around_a_grill_watc_94fa5349-5d93-4af0-a652-99468197a5d6.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .glass {
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        padding: 30px;
+        width: 320px;
+        height: 90vh;
+        backdrop-filter: blur(2px);
+        box-shadow: 10px 10px 10px rgba(128, 128, 128, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 1.5em;
+      }
+
+      p {
+        font-size: 1.2em;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      select,
+      input,
+      button {
+        font-size: 1em;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        background: rgba(255, 255, 255, 0.5);
+        color: #000000; /* dark text color */
+      }
+
+      input {
+        border: 1px solid #000000; /* dark text color */
+      }
+
+      button {
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        background: linear-gradient(45deg, #9eaebd, #d4d5d6, #9eaebd, #d4d5d6);
+        background-size: 400% 400%;
+        color: #000000; /* dark text color */
+      }
+
+      button:hover {
+        background: linear-gradient(45deg, #d4d5d6, #9eaebd, #d4d5d6, #9eaebd);
+      }
+
+      span {
+        color: #000000; /* dark text color */
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glass">
+      <h1>LiveFire Food Calculator</h1>
+      <p>
+        Meat Type:
+        <select id="meatType" onchange="updateYieldAndCost()">
+          <option value="chicken">Chicken</option>
+          <option value="beef">Beef</option>
+          <option value="pork">Pork</option>
+        </select>
+      </p>
+      <p>
+        Cost per Pound ($):
+        <input type="text" id="costPerPound" value="2.80" readonly />
+      </p>
+      <p>
+        Yield Percentage (%):
+        <input type="text" id="yieldPercent" value="50" readonly />
+      </p>
+      <p>
+        Number of People:
+        <input
+          type="number"
+          id="numPeople"
+          value="100"
+          min="1"
+          step="1"
+          oninput="let newValue = value.replace(/[^0-9]/g, ''); if (newValue === '') newValue = '1'; value = parseInt(newValue);"
+        />
+      </p>
+      <button onclick="calculate()">Calculate</button>
+      <p>Finished Weight: <span id="finishedWeight"></span></p>
+      <p>Raw Weight: <span id="rawWeight"></span></p>
+      <p>Total Cost: <span id="totalCost"></span></p>
+    </div>
     <script>
       function updateYieldAndCost() {
         var meatType = document.getElementById("meatType").value;
@@ -45,29 +167,5 @@
           "$" + totalCost.toFixed(2);
       }
     </script>
-  </head>
-  <body>
-    <h1>Food Calculator</h1>
-    <p>
-      Meat Type:
-      <select id="meatType" onchange="updateYieldAndCost()">
-        <option value="chicken">Chicken</option>
-        <option value="beef">Beef</option>
-        <option value="pork">Pork</option>
-      </select>
-    </p>
-    <p>Number of People: <input type="text" id="numPeople" value="100" /></p>
-    <p>
-      Cost per Pound ($):
-      <input type="text" id="costPerPound" value="2.80" readonly />
-    </p>
-    <p>
-      Yield Percentage (%):
-      <input type="text" id="yieldPercent" value="50" readonly />
-    </p>
-    <button onclick="calculate()">Calculate</button>
-    <p>Finished Weight: <span id="finishedWeight"></span></p>
-    <p>Raw Weight: <span id="rawWeight"></span></p>
-    <p>Total Cost: <span id="totalCost"></span></p>
   </body>
 </html>

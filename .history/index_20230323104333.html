@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <script>
+      function updateYieldAndCost() {
+        var meatType = document.getElementById("meatType").value;
+        var costPerPound;
+        var yieldPercent;
+
+        switch (meatType) {
+          case "chicken":
+            costPerPound = 2.8;
+            yieldPercent = 50;
+            break;
+          case "beef":
+            costPerPound = 5.0;
+            yieldPercent = 60;
+            break;
+          case "pork":
+            costPerPound = 3.5;
+            yieldPercent = 55;
+            break;
+          default:
+            costPerPound = 2.8;
+            yieldPercent = 50;
+        }
+
+        document.getElementById("costPerPound").value = costPerPound;
+        document.getElementById("yieldPercent").value = yieldPercent;
+      }
+
+      function calculate() {
+        var numPeople = document.getElementById("numPeople").value;
+        var costPerPound = document.getElementById("costPerPound").value;
+        var yieldPercent = document.getElementById("yieldPercent").value;
+
+        var finishedWeight = numPeople / 2.6;
+        var rawWeight = finishedWeight / (yieldPercent / 100);
+        var totalCost = rawWeight * costPerPound;
+
+        document.getElementById("finishedWeight").innerHTML =
+          finishedWeight.toFixed(2) + " lbs";
+        document.getElementById("rawWeight").innerHTML =
+          rawWeight.toFixed(2) + " lbs";
+        document.getElementById("totalCost").innerHTML =
+          "$" + totalCost.toFixed(2);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Food Calculator</h1>
+    <p>
+      Meat Type:
+      <select id="meatType" onchange="updateYieldAndCost()">
+        <option value="chicken">Chicken</option>
+        <option value="beef">Beef</option>
+        <option value="pork">Pork</option>
+      </select>
+    </p>
+    <p>Number of People: <input type="text" id="numPeople" value="100" /></p>
+    <p>
+      Cost per Pound ($):
+      <input type="text" id="costPerPound" value="2.80" readonly />
+    </p>
+    <p>
+      Yield Percentage (%):
+      <input type="text" id="yieldPercent" value="50" readonly />
+    </p>
+    <button onclick="calculate()">Calculate</button>
+    <p>Finished Weight: <span id="finishedWeight"></span></p>
+    <p>Raw Weight: <span id="rawWeight"></span></p>
+    <p>Total Cost: <span id="totalCost"></span></p>
+  </body>
+</html>
