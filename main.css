@@ -105,8 +105,9 @@ body {
   --transition-medium: 150ms ease-in-out;
   
   /* Form element sizing for touch targets - reduced height */
-  --input-height: 2.6rem;         /* Reduced from 3rem but still maintains good tap target size */
-  --input-padding: 0.6rem;        /* Reduced from 0.75rem */
+  --input-height: 2.8rem;         /* Reduced from 3rem but still maintains good tap target size */
+  --input-padding: 0.8rem;        /* Reduced from 0.75rem */
+  --input-padding-y: 0.4rem;        /* Reduced from 0.75rem */
 }
 
 /* ===== 3. Typography ===== */
@@ -208,7 +209,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: var(--input-height);
   padding: 0 var(--input-padding);
-  font-size: 0.95rem; /* Reduced from 1rem */
+  font-size: 1.50rem; /* Reduced from 1rem */
   line-height: 1.4; /* Reduced from 1.5 */
   color: var(--color-text);
   background-color: rgba(10, 20, 30, 0.6);
@@ -379,7 +380,7 @@ input[type="number"] {
   transition: all var(--transition-fast);
   border-bottom: 1px solid rgba(100, 200, 255, 0.1);
   font-family: "Share Tech Mono", "Space Mono", monospace;
-  font-size: 0.9rem; /* Added to reduce size */
+  font-size: 1rem; /* Added to reduce size */
 }
 
 .result-item:last-child {
