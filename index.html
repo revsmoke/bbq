@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>LiveFire Food Calculator</title>
@@ -35,7 +36,7 @@
         border-radius: 10px;
         padding: 30px;
         width: 320px;
-        height: 90vh;
+        height: auto;
         backdrop-filter: blur(2px);
         box-shadow: 10px 10px 10px rgba(128, 128, 128, 0.2);
       }
@@ -85,6 +86,12 @@
         color: #000000; /* dark text color */
         font-weight: bold;
       }
+
+      #loadingIndicator {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 10px;
+      }
     </style>
   </head>
   <body>
@@ -92,7 +99,7 @@
       <h1>LiveFire Food Calculator</h1>
       <p>
         Meat Type:
-        <select id="meatType" onchange="updateYieldAndCost()">
+        <select id="meatType">
           <option value="chicken">Chicken</option>
           <option value="beef">Beef</option>
           <option value="pork">Pork</option>
@@ -100,11 +107,11 @@
       </p>
       <p>
         Cost per Pound ($):
-        <input type="text" id="costPerPound" value="2.80" readonly />
+        <input type="number" id="costPerPound" value="2.80" step="0.01" />
       </p>
       <p>
         Yield Percentage (%):
-        <input type="text" id="yieldPercent" value="50" readonly />
+        <input type="number" id="yieldPercent" value="50" step="0.01" />
       </p>
       <p>
         Number of People:
@@ -114,58 +121,112 @@
           value="100"
           min="1"
           step="1"
-          oninput="let newValue = value.replace(/[^0-9]/g, ''); if (newValue === '') newValue = '1'; value = parseInt(newValue);"
         />
       </p>
       <button onclick="calculate()">Calculate</button>
+      <button onclick="saveManualPrice()">Save Price</button>
       <p>Finished Weight: <span id="finishedWeight"></span></p>
       <p>Raw Weight: <span id="rawWeight"></span></p>
       <p>Total Cost: <span id="totalCost"></span></p>
+      <div id="loadingIndicator" style="display: none;">Updating prices...</div>
     </div>
     <script>
-      function updateYieldAndCost() {
-        var meatType = document.getElementById("meatType").value;
-        var costPerPound;
-        var yieldPercent;
+      const defaultData = {
+        chicken: { costPerPound: 2.80, yieldPercent: 50 },
+        beef: { costPerPound: 5.00, yieldPercent: 60 },
+        pork: { costPerPound: 3.50, yieldPercent: 55 },
+      };
 
-        switch (meatType) {
-          case "chicken":
-            costPerPound = 2.8;
-            yieldPercent = 50;
-            break;
-          case "beef":
-            costPerPound = 5.0;
-            yieldPercent = 60;
-            break;
-          case "pork":
-            costPerPound = 3.5;
-            yieldPercent = 55;
-            break;
-          default:
-            costPerPound = 2.8;
-            yieldPercent = 50;
+      function initializeData() {
+        if (!localStorage.getItem('meatData')) {
+          localStorage.setItem('meatData', JSON.stringify(defaultData));
+        }
+      }
+
+      initializeData();
+
+      function updateYieldAndCost() {
+        const meatType = document.getElementById('meatType').value;
+        const meatData = JSON.parse(localStorage.getItem('meatData'));
+
+        if (meatData && meatData[meatType]) {
+          document.getElementById('costPerPound').value = meatData[meatType].costPerPound;
+          document.getElementById('yieldPercent').value = meatData[meatType].yieldPercent;
+        }
+      }
+
+      async function fetchAndUpdatePrices() {
+        document.getElementById('loadingIndicator').style.display = 'block';
+        const meatTypes = ['chicken', 'beef', 'pork'];
+        const meatData = JSON.parse(localStorage.getItem('meatData')) || defaultData;
+
+        for (const meat of meatTypes) {
+          try {
+            // Placeholder for API call
+            // Replace simulateAPICall with actual API call to your backend
+            const fetchedPrice = await simulateAPICall(meat);
+            if (fetchedPrice) {
+              meatData[meat].costPerPound = fetchedPrice;
+            }
+          } catch (error) {
+            console.error(`Failed to update ${meat} price:`, error);
+          }
         }
 
-        document.getElementById("costPerPound").value = costPerPound;
-        document.getElementById("yieldPercent").value = yieldPercent;
+        localStorage.setItem('meatData', JSON.stringify(meatData));
+        updateYieldAndCost();
+        document.getElementById('loadingIndicator').style.display = 'none';
+      }
+
+      function simulateAPICall(meatType) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            // Simulated fetched prices
+            const simulatedPrices = {
+              chicken: 3.00,
+              beef: 5.50,
+              pork: 4.00,
+            };
+            resolve(simulatedPrices[meatType]);
+          }, 1000); // Simulate network delay
+        });
+      }
+
+      function saveManualPrice() {
+        const meatType = document.getElementById('meatType').value;
+        const costPerPound = parseFloat(document.getElementById('costPerPound').value);
+        const yieldPercent = parseFloat(document.getElementById('yieldPercent').value);
+        const meatData = JSON.parse(localStorage.getItem('meatData')) || defaultData;
+
+        meatData[meatType] = { costPerPound, yieldPercent };
+        localStorage.setItem('meatData', JSON.stringify(meatData));
+
+        alert(`${meatType.charAt(0).toUpperCase() + meatType.slice(1)} data updated.`);
       }
 
       function calculate() {
-        var numPeople = document.getElementById("numPeople").value;
-        var costPerPound = document.getElementById("costPerPound").value;
-        var yieldPercent = document.getElementById("yieldPercent").value;
+        const numPeople = parseInt(document.getElementById('numPeople').value);
+        const costPerPound = parseFloat(document.getElementById('costPerPound').value);
+        const yieldPercent = parseFloat(document.getElementById('yieldPercent').value);
 
-        var finishedWeight = numPeople / 2.6;
-        var rawWeight = finishedWeight / (yieldPercent / 100);
-        var totalCost = rawWeight * costPerPound;
+        const finishedWeight = numPeople / 2.6;
+        const rawWeight = finishedWeight / (yieldPercent / 100);
+        const totalCost = rawWeight * costPerPound;
 
-        document.getElementById("finishedWeight").innerHTML =
-          finishedWeight.toFixed(2) + " lbs";
-        document.getElementById("rawWeight").innerHTML =
-          rawWeight.toFixed(2) + " lbs";
-        document.getElementById("totalCost").innerHTML =
-          "$" + totalCost.toFixed(2);
+        document.getElementById('finishedWeight').innerHTML = finishedWeight.toFixed(2) + ' lbs';
+        document.getElementById('rawWeight').innerHTML = rawWeight.toFixed(2) + ' lbs';
+        document.getElementById('totalCost').innerHTML = '$' + totalCost.toFixed(2);
       }
+
+      document.getElementById('meatType').addEventListener('change', () => {
+        updateYieldAndCost();
+        calculate();
+      });
+
+      // Initialize the app
+      updateYieldAndCost();
+      calculate();
+      fetchAndUpdatePrices();
     </script>
   </body>
 </html>
