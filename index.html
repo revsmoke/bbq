@@ -1,149 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveFire Food Calculator</title>
-    <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #000000; /* dark text color */
-        background: linear-gradient(45deg, #9eaebd, #d4d5d6, #9eaebd, #d4d5d6);
-        background-size: 400% 400%;
-        padding: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-image: url("img/Bryan.Rice_a_bunch_of_space_aliens_standing_around_a_grill_watc_94fa5349-5d93-4af0-a652-99468197a5d6.png");
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-
-      @keyframes gradient {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      .glass {
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 10px;
-        padding: 30px;
-        width: 380px; /* Increased width for more content */
-        height: auto;
-        backdrop-filter: blur(2px);
-        box-shadow: 10px 10px 10px rgba(128, 128, 128, 0.2);
-      }
-
-      h1 {
-        text-align: center;
-        font-size: 1.5em;
-      }
-
-      p {
-        font-size: 1.2em;
-        line-height: 1.6;
-        margin-bottom: 15px; /* Adjusted margin */
-      }
-
-      select,
-      input,
-      button {
-        font-size: 1em;
-        padding: 10px;
-        width: 100%;
-        border: none;
-        border-radius: 5px;
-        box-sizing: border-box;
-        margin-bottom: 10px;
-        background: rgba(255, 255, 255, 0.5);
-        color: #000000; /* dark text color */
-      }
-
-      input {
-        border: 1px solid #000000; /* dark text color */
-      }
-
-      button {
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        background: linear-gradient(45deg, #9eaebd, #d4d5d6, #9eaebd, #d4d5d6);
-        background-size: 400% 400%;
-        color: #000000; /* dark text color */
-      }
-
-      button:hover {
-        background: linear-gradient(45deg, #d4d5d6, #9eaebd, #d4d5d6, #9eaebd);
-      }
-
-      span {
-        color: #000000; /* dark text color */
-        font-weight: bold;
-      }
-
-      #loadingIndicator {
-        text-align: center;
-        font-weight: bold;
-        margin-top: 10px;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div class="glass">
-      <h1>LiveFire Food Calculator</h1>
-      <p>
-        Meat Cut:
-        <select id="meatType">
-          <option value="brisket">Beef Brisket</option>
-          <option value="beefRibs">Beef Ribs</option>
-          <option value="pulledPork">Pork Shoulder (Pulled Pork)</option>
-          <option value="porkRibs">Pork Ribs (Spare)</option>
-          <option value="porkBelly">Pork Belly</option>
-          <option value="chickenWhole">Whole Chicken</option>
-          <option value="chickenThighs">Chicken Thighs</option>
-          <option value="chickenWings">Chicken Wings</option>
-        </select>
-      </p>
-      <p>
-        Cost per Pound ($):
-        <input type="number" id="costPerPound" value="4.50" step="0.01" />
-      </p>
-      <p>
-        Yield Percentage (%):
-        <input type="number" id="yieldPercent" value="50" step="0.01" />
-      </p>
-      <p>
-        Number of People:
-        <input
-          type="number"
-          id="numPeople"
-          value="50"
-          min="1"
-          step="1"
-        />
-      </p>
-      <p>
-        Serving Size per Person (lbs):
-        <input
-          type="number"
-          id="servingSize"
-          value="0.5" 
-          min="0.1"
-          step="0.05"
-        />
-      </p>
-      <button onclick="calculate()">Calculate</button>
-      <button onclick="saveManualPrice()">Save Price & Yield</button>
-      <p>Finished Weight: <span id="finishedWeight"></span></p>
-      <p>Raw Weight: <span id="rawWeight"></span></p>
-      <p>Total Cost: <span id="totalCost"></span></p>
-      <div id="loadingIndicator" style="display: none;">Updating prices...</div>
+    <div class="app-container">
+      <div class="card">
+        <header class="card-header">
+          <h1 class="title">LiveFire BBQ Calculator</h1>
+        </header>
+        <div class="card-content">
+          <div class="form-group">
+            <label for="meatType" class="form-label">Meat Cut:</label>
+            <select id="meatType" class="form-control form-select">
+              <option value="brisket">Beef Brisket</option>
+              <option value="beefRibs">Beef Ribs</option>
+              <option value="pulledPork">Pork Shoulder (Pulled Pork)</option>
+              <option value="porkRibs">Pork Ribs (Spare)</option>
+              <option value="porkBelly">Pork Belly</option>
+              <option value="chickenWhole">Whole Chicken</option>
+              <option value="chickenThighs">Chicken Thighs</option>
+              <option value="chickenWings">Chicken Wings</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="costPerPound" class="form-label">Cost per Pound ($):</label>
+            <input type="number" id="costPerPound" class="form-control" value="4.50" step="0.01" />
+          </div>
+          
+          <div class="form-group">
+            <label for="yieldPercent" class="form-label">Yield Percentage (%):</label>
+            <input type="number" id="yieldPercent" class="form-control" value="50" step="0.01" />
+          </div>
+          
+          <div class="form-group">
+            <label for="numPeople" class="form-label">Number of People:</label>
+            <input
+              type="number"
+              id="numPeople"
+              class="form-control"
+              value="50"
+              min="1"
+              step="1"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="servingSize" class="form-label">Serving Size per Person (lbs):</label>
+            <input
+              type="number"
+              id="servingSize"
+              class="form-control"
+              value="0.5" 
+              min="0.1"
+              step="0.05"
+            />
+          </div>
+          
+          <div class="button-group">
+            <button id="calculateBtn" class="btn btn-primary" onclick="calculate()">Calculate</button>
+            <button id="saveBtn" class="btn btn-secondary" onclick="saveManualPrice()">Save Price & Yield</button>
+          </div>
+          
+          <div class="results-section">
+            <div class="result-item">
+              <span class="result-label">Finished Weight:</span> 
+              <span id="finishedWeight" class="result-value"></span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Raw Weight:</span> 
+              <span id="rawWeight" class="result-value"></span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Total Cost:</span> 
+              <span id="totalCost" class="result-value"></span>
+            </div>
+          </div>
+          
+          <div id="loadingIndicator" class="loading-indicator">
+            <div class="spinner"></div>
+            <span>Updating prices...</span>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
       const defaultData = {

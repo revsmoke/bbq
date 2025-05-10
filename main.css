@@ -1,0 +1,583 @@
+/* 
+ * LiveFire Food Calculator - Main Stylesheet
+ * 
+ * A neo-skeuomorphic, mobile-first calculator UI with a warm, food-friendly palette
+ * Designed to meet WCAG 2.2 AA standards with fluid, responsive layout
+ * 
+ * Table of Contents:
+ * 1. CSS Reset & Base Styles
+ * 2. Custom Properties (Variables)
+ * 3. Typography
+ * 4. Layout & Container Styles
+ * 5. Form Elements
+ * 6. Buttons
+ * 7. Results Section
+ * 8. Loading Indicator
+ * 9. Media Queries
+ * 10. Utility Classes & Animations
+ * 11. Accessibility Enhancements
+ */
+
+/* ===== 1. CSS Reset & Base Styles ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%; /* 16px by default, adjust with media queries */
+  height: 100%;
+}
+
+/* Make font size slightly smaller to reduce vertical spacing */
+body {
+  min-height: 100%;
+  font-family: "Rajdhani", "Orbitron", "Syncopate", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.4; /* Reduced from 1.5 */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  
+  /* Accessibility: Ensure proper contrast and readability with slightly smaller font */
+  font-size: clamp(15px, 2.5vw, 17px); /* Reduced from 16px/18px */
+  
+  /* Background image with sci-fi overlay for better card contrast */
+  background-image: linear-gradient(rgba(0, 20, 40, 0.7), rgba(20, 0, 40, 0.8)), 
+                    url("img/livefire_calculator_bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ===== 2. Custom Properties (Variables) ===== */
+:root {
+  /* Color Palette - Retro-future sci-fi inspired colors */
+  --color-primary: hsl(200, 70%, 50%);          /* Neon blue */
+  --color-primary-light: hsl(200, 70%, 60%);
+  --color-primary-dark: hsl(200, 70%, 40%);
+  
+  --color-secondary: hsl(320, 60%, 45%);        /* Futuristic purple */
+  --color-secondary-light: hsl(320, 60%, 55%);
+  --color-secondary-dark: hsl(320, 60%, 35%);
+  
+  --color-background: hsl(220, 20%, 15%);      /* Dark space gray */
+  --color-surface: hsl(220, 15%, 20%);         /* Card background */
+  --color-surface-accent: hsl(220, 15%, 18%);  /* Subtle variation for depth */
+  
+  --color-text: hsl(190, 80%, 90%);            /* Bright cyan text */
+  --color-text-light: hsl(190, 50%, 80%);
+  --color-text-lighter: hsl(190, 30%, 70%);
+  
+  --color-success: hsl(145, 80%, 45%);        /* Sci-fi green */
+  --color-error: hsl(354, 80%, 60%);          /* Bright red */
+  
+  /* Spacing - 8pt grid system with reduced vertical spacing */
+  --space-unit: 0.4rem;                      /* 6.4px at default font size - reduced from 0.5rem */
+  --space-xs: calc(var(--space-unit) * 0.5); /* 3.2px */
+  --space-sm: var(--space-unit);             /* 6.4px */
+  --space-md: calc(var(--space-unit) * 2);   /* 12.8px */
+  --space-lg: calc(var(--space-unit) * 3);   /* 19.2px */
+  --space-xl: calc(var(--space-unit) * 4);   /* 25.6px */
+  --space-xxl: calc(var(--space-unit) * 6);  /* 38.4px */
+  
+  /* Border Radius */
+  --radius-sm: 0.5rem;                       /* 8px */
+  --radius-md: 0.75rem;                      /* 12px */
+  --radius-lg: 1rem;                         /* 16px */
+  --radius-xl: 1.5rem;                       /* 24px */
+  
+  /* Shadows for retro-futuristic effect - more subtle with neon glow */
+  --shadow-inner: inset 2px 2px 5px rgba(0, 0, 0, 0.3), 
+                  inset -2px -2px 5px rgba(100, 220, 255, 0.1);
+  --shadow-outer: 0 0 8px rgba(100, 200, 255, 0.2),
+                  3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-pressed: inset 2px 2px 5px rgba(0, 0, 0, 0.4),
+                    inset -1px -1px 3px rgba(100, 220, 255, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 100ms ease-in-out;
+  --transition-medium: 150ms ease-in-out;
+  
+  /* Form element sizing for touch targets - reduced height */
+  --input-height: 2.6rem;         /* Reduced from 3rem but still maintains good tap target size */
+  --input-padding: 0.6rem;        /* Reduced from 0.75rem */
+}
+
+/* ===== 3. Typography ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.title {
+  font-size: clamp(1.3rem, 5vw, 1.8rem); /* Reduced from 1.5rem/2rem */
+  margin-bottom: var(--space-sm); /* Reduced from --space-md */
+  text-align: center;
+  color: var(--color-primary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
+  
+  /* Add a retro computer terminal feel */
+  font-family: "Orbitron", "Rajdhani", monospace;
+  font-weight: 600;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-xs); /* Was already using the smallest space value */
+  color: var(--color-text);
+  font-size: 0.9rem; /* Added to reduce vertical spacing */
+}
+
+.result-label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.result-value {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+/* ===== 4. Layout & Container Styles ===== */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-sm); /* Reduced from --space-md */
+}
+
+.card {
+  width: 100%;
+  max-width: 28rem; /* 448px */
+  background: var(--color-surface);
+  border-radius: var(--radius-lg); /* Reduced from --radius-xl */
+  overflow: hidden;
+  
+  /* Retro-futuristic effect with subtle neon border */
+  box-shadow: var(--shadow-outer), 0 0 0 1px rgba(100, 220, 255, 0.2);
+  
+  /* Subtle gradient for depth - with sci-fi look */
+  background: linear-gradient(
+    170deg,
+    var(--color-surface-accent),
+    var(--color-surface)
+  );
+  
+  /* Ensure proper padding on all sides - reduced for vertical compactness */
+  padding: var(--space-md); /* Reduced from --space-lg */
+  
+  /* For glass effect */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(20, 30, 50, 0.8);
+  
+  /* Retro terminal-style border */
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  position: relative;
+}
+
+.card-header {
+  margin-bottom: var(--space-sm); /* Reduced from --space-lg */
+  text-align: center;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm); /* Reduced from --space-md */
+}
+
+/* ===== 5. Form Elements ===== */
+.form-group {
+  margin-bottom: var(--space-sm); /* Reduced from --space-md */
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: var(--input-height);
+  padding: 0 var(--input-padding);
+  font-size: 0.95rem; /* Reduced from 1rem */
+  line-height: 1.4; /* Reduced from 1.5 */
+  color: var(--color-text);
+  background-color: rgba(10, 20, 30, 0.6);
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-medium);
+  
+  /* Retro-futuristic terminal-like inset effect */
+  box-shadow: var(--shadow-inner);
+  
+  /* Add retro terminal font */
+  font-family: "Share Tech Mono", "Space Mono", monospace;
+  letter-spacing: 0.05em;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: var(--shadow-inner), 0 0 0 3px rgba(var(--color-primary-rgb), 0.25);
+}
+
+/* Convert primary color to RGB for box-shadow opacity */
+:root {
+  --color-primary-rgb: 51, 153, 204; /* RGB equivalent of var(--color-primary) */
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23555555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--input-padding) center;
+  background-size: 1.25rem;
+  padding-right: calc(var(--input-padding) * 2 + 1.25rem);
+}
+
+/* Style input:number to remove browser arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ===== 6. Buttons ===== */
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm); /* Reduced from --space-md */
+  margin: var(--space-sm) 0; /* Reduced from --space-lg */
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--input-height);
+  padding: 0 var(--space-md); /* Slightly reduced horizontal padding */
+  font-size: 0.95rem; /* Reduced from 1rem */
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  
+  /* Neo-skeuomorphic raised effect */
+  box-shadow: var(--shadow-outer);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-pressed);
+}
+
+.btn-primary {
+  color: white;
+  background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary-dark));
+  border: 1px solid var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: "Rajdhani", "Orbitron", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+  box-shadow: 0 0 15px rgba(100, 200, 255, 0.4);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: scanline 2s linear infinite;
+}
+
+.btn-secondary {
+  color: white;
+  background: linear-gradient(180deg, var(--color-secondary-light), var(--color-secondary-dark));
+  border: 1px solid var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: "Rajdhani", "Orbitron", sans-serif;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: linear-gradient(180deg, var(--color-secondary), var(--color-secondary-dark));
+  box-shadow: 0 0 15px rgba(200, 100, 255, 0.4);
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===== 7. Results Section ===== */
+.results-section {
+  margin-top: var(--space-sm); /* Reduced from --space-md */
+  padding: var(--space-sm); /* Reduced from --space-md */
+  border-radius: var(--radius-md);
+  
+  /* Retro-futuristic terminal look */
+  box-shadow: var(--shadow-inner);
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  background-color: rgba(0, 30, 60, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.results-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  opacity: 0.7;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs); /* Reduced from --space-sm */
+  padding: var(--space-xs); /* Reduced from --space-sm */
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid rgba(100, 200, 255, 0.1);
+  font-family: "Share Tech Mono", "Space Mono", monospace;
+  font-size: 0.9rem; /* Added to reduce size */
+}
+
+.result-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.result-item:hover {
+  background-color: rgba(100, 200, 255, 0.1);
+}
+
+.result-value {
+  font-weight: 700;
+  color: var(--color-primary-light);
+  text-shadow: 0 0 5px rgba(100, 200, 255, 0.5);
+}
+
+/* ===== 8. Loading Indicator ===== */
+.loading-indicator {
+  display: none; /* Hidden by default, shown via JS */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  gap: var(--space-sm);
+  text-align: center;
+  color: var(--color-text-light);
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 0.2rem solid rgba(var(--color-primary-rgb), 0.2);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  border-right-color: var(--color-primary-light);
+  box-shadow: 0 0 15px rgba(var(--color-primary-rgb), 0.4);
+  animation: spin 1.2s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    border-width: 0.25rem;
+  }
+  50% {
+    transform: rotate(180deg);
+    border-width: 0.1rem;
+  }
+  100% {
+    transform: rotate(360deg);
+    border-width: 0.25rem;
+  }
+}
+
+/* ===== 9. Media Queries ===== */
+/* Mobile-first design, adjustments for larger screens */
+
+/* Small tablets (portrait) and large phones */
+@media (min-width: 600px) {
+  .card {
+    padding: var(--space-md); /* Reduced from --space-xl */
+  }
+  
+  .button-group {
+    margin: var(--space-md) 0; /* Reduced from --space-xl */
+  }
+  
+  .results-section {
+    padding: var(--space-md); /* Reduced from --space-lg */
+  }
+}
+
+/* Tablets and small laptops */
+@media (min-width: 900px) {
+  :root {
+    --space-unit: 0.5rem; /* Slightly increased spacing (8px) */
+  }
+  
+  .card {
+    max-width: 32rem; /* 512px */
+  }
+  
+  .form-group {
+    margin-bottom: var(--space-md); /* Keep as --space-md since we increased base unit size */
+  }
+}
+
+/* Desktops and large screens */
+@media (min-width: 1200px) {
+  .card {
+    max-width: 36rem; /* 576px */
+  }
+  
+  .button-group {
+    gap: var(--space-lg);
+  }
+}
+
+/* ===== 10. Utility Classes & Animations ===== */
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Transition for results when they change */
+.result-value {
+  transition: all 0.3s ease;
+}
+
+/* Subtle animation for when results are updated */
+@keyframes highlight {
+  0% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: rgba(var(--color-primary-rgb), 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Apply this class via JS to newly updated results */
+.result-updated {
+  animation: highlight 1.5s ease-out;
+}
+
+/* Add retro-futuristic terminal scan effect to the card */
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(100, 200, 255, 0.2) 15%, 
+    rgba(100, 200, 255, 0.8) 50%,
+    rgba(100, 200, 255, 0.2) 85%,
+    transparent 100%);
+  opacity: 0.7;
+  animation: scanline 3s linear infinite;
+  pointer-events: none;
+}
+
+/* Additional sci-fi font loading */
+/* Web fonts are included in the HTML head for better performance */
+
+/* ===== 11. Accessibility Enhancements ===== */
+/* Focus styles for keyboard navigation */
+:focus {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .spinner {
+    animation: none;
+    border-top-color: var(--color-primary-dark);
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: hsl(200, 100%, 50%);
+    --color-text: white;
+    --color-background: black;
+    --color-surface: black;
+  }
+  
+  .btn {
+    border: 2px solid var(--color-primary);
+  }
+  
+  .card {
+    border: 2px solid var(--color-primary);
+  }
+  
+  .form-control {
+    border: 2px solid var(--color-primary);
+  }
+}
